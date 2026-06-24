@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FMCG Sales & Distribution Analytics · Industry Primer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fraunces:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0F172A; --ink:#1F2937; --slate:#475569; --gray:#6B7280;
+    --light:#E5E7EB; --paper:#FAFAFA; --cream:#FEFCE8;
+    --accent:#B45309; --accent-soft:#FEF3C7; --accent-dark:#78350F;
+    --gold:#B45309; --gold-soft:#FEF3C7;
+    --green:#047857; --green-soft:#D1FAE5;
+    --blue:#1D4ED8; --blue-soft:#DBEAFE;
+    --purple:#6D28D9; --purple-soft:#EDE9FE;
+    --red:#B91C1C; --red-soft:#FEE2E2;
+    --teal:#0F766E; --teal-soft:#CCFBF1;
+  }
+  *,*::before,*::after { box-sizing: border-box; margin:0; padding:0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink); background: #FFFFFF; line-height: 1.65; font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  .narrow { max-width: 820px; margin: 0 auto; }
+
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.92); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--light); padding: 14px 0;
+  }
+  .topnav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 1100px; margin: 0 auto; padding: 0 32px;
+  }
+  .brand {
+    font-family: 'Fraunces', serif;
+    font-weight: 700; font-size: 20px; color: var(--navy); letter-spacing: -0.02em;
+  }
+  .brand span { color: var(--accent); }
+  .nav-links { display: flex; gap: 24px; list-style: none; }
+  .nav-links a { color: var(--slate); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  .hero {
+    padding: 110px 0 100px;
+    background: linear-gradient(180deg, #FFFFFF 0%, var(--paper) 100%);
+    border-bottom: 1px solid var(--light);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -20%; right: -10%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(180,83,9,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent);
+    padding: 8px 16px; background: var(--accent-soft);
+    border-radius: 100px; margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(38px, 5.5vw, 64px);
+    line-height: 1.05; letter-spacing: -0.03em; color: var(--navy);
+    font-weight: 700; margin-bottom: 24px;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); font-weight: 600; }
+  .hero-lede {
+    font-size: 20px; line-height: 1.6; color: var(--slate);
+    max-width: 720px; margin-bottom: 36px;
+  }
+  .hero-meta {
+    display: flex; gap: 32px; flex-wrap: wrap;
+    padding: 20px 24px; background: #FFFFFF;
+    border: 1px solid var(--light); border-radius: 12px;
+    max-width: 720px;
+  }
+  .hero-meta-item .label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--gray); margin-bottom: 4px;
+  }
+  .hero-meta-item .value { font-size: 15px; font-weight: 600; color: var(--navy); }
+
+  section { padding: 80px 0; scroll-margin-top: 70px; }
+  section.alt { background: var(--paper); }
+  .eyebrow {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 12px;
+  }
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 3.5vw, 40px);
+    color: var(--navy); letter-spacing: -0.02em;
+    font-weight: 700; line-height: 1.15; margin-bottom: 16px;
+  }
+  h2 em { font-style: italic; color: var(--accent); }
+  h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px; font-weight: 700; color: var(--navy);
+    margin: 32px 0 10px; letter-spacing: -0.01em;
+  }
+  h4 { font-size: 15px; font-weight: 700; color: var(--navy); margin: 18px 0 6px; }
+  p { margin-bottom: 14px; color: var(--ink); }
+  p.lede { font-size: 18px; line-height: 1.65; color: var(--slate); margin-bottom: 28px; }
+  ul, ol { margin: 0 0 16px 22px; }
+  ul li, ol li { margin-bottom: 6px; line-height: 1.6; }
+  strong { color: var(--navy); font-weight: 600; }
+  em { color: var(--slate); }
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    background: var(--paper); border: 1px solid var(--light);
+    padding: 1px 6px; border-radius: 4px; color: var(--accent-dark);
+  }
+
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 820px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+
+  .card {
+    background: #FFFFFF; border: 1px solid var(--light);
+    border-radius: 14px; padding: 26px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(15,23,42,0.06); }
+  .card-kicker {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+  }
+  .card h4 { font-size: 18px; margin-bottom: 10px; margin-top: 0; }
+  .card p { font-size: 14.5px; line-height: 1.6; color: var(--slate); margin-bottom: 0; }
+
+  .callout {
+    background: var(--gold-soft);
+    border-left: 4px solid var(--gold);
+    padding: 22px 26px; border-radius: 0 10px 10px 0;
+    margin: 28px 0;
+  }
+  .callout.blue { background: var(--blue-soft); border-left-color: var(--blue); }
+  .callout.green { background: var(--green-soft); border-left-color: var(--green); }
+  .callout.purple { background: var(--purple-soft); border-left-color: var(--purple); }
+  .callout.red { background: var(--red-soft); border-left-color: var(--red); }
+  .callout-title {
+    font-weight: 700; color: var(--navy); margin-bottom: 6px;
+    font-size: 15px; display: flex; align-items: center; gap: 8px;
+  }
+  .callout p { margin-bottom: 0; font-size: 15px; color: var(--ink); }
+  .callout p + p { margin-top: 10px; }
+
+  .table-wrap { overflow-x: auto; margin: 20px 0; }
+  table {
+    width: 100%; border-collapse: collapse; font-size: 14.5px;
+    border-radius: 10px; overflow: hidden;
+    box-shadow: 0 0 0 1px var(--light);
+  }
+  th {
+    background: var(--navy); color: #FFFFFF;
+    text-align: left; padding: 14px 16px;
+    font-weight: 600; font-size: 13px; letter-spacing: 0.02em;
+  }
+  td { padding: 12px 16px; border-top: 1px solid var(--light); vertical-align: top; }
+  tbody tr:nth-child(even) { background: var(--paper); }
+  tbody tr:hover { background: var(--cream); }
+
+  /* Sales hierarchy — pyramid downward */
+  .org-chart { margin: 30px auto; max-width: 720px; }
+  .org-row {
+    display: flex; align-items: center; gap: 18px;
+    margin-bottom: 16px;
+  }
+  .org-bar {
+    padding: 16px 22px; color: #FFFFFF; font-weight: 700;
+    font-size: 14px; border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    text-align: center;
+  }
+  .org-row:nth-child(1) .org-bar { background: linear-gradient(135deg, #B45309, #78350F); width: 30%; }
+  .org-row:nth-child(2) .org-bar { background: linear-gradient(135deg, #D97706, #B45309); width: 45%; }
+  .org-row:nth-child(3) .org-bar { background: linear-gradient(135deg, #F59E0B, #D97706); width: 65%; }
+  .org-row:nth-child(4) .org-bar { background: linear-gradient(135deg, #FBBF24, #F59E0B); width: 85%; }
+  .org-row:nth-child(5) .org-bar { background: linear-gradient(135deg, #FDE68A, #FBBF24); color:#78350F; width: 100%; }
+  .org-desc { font-size: 13.5px; color: var(--slate); line-height: 1.5; flex: 1; }
+  .org-desc strong { display: block; color: var(--navy); margin-bottom: 2px; font-size: 14px; }
+
+  /* Distribution flow — left to right pipeline */
+  .flow {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 8px; margin: 30px 0; align-items: stretch;
+  }
+  @media (max-width: 820px) { .flow { grid-template-columns: repeat(2, 1fr); } }
+  .flow-node {
+    padding: 22px 14px; text-align: center; border-radius: 10px;
+    border: 1px solid var(--light); background: #FFFFFF;
+    position: relative;
+  }
+  .flow-node::after {
+    content: '→'; position: absolute;
+    right: -14px; top: 50%; transform: translateY(-50%);
+    font-size: 22px; color: var(--gray); z-index: 2; font-weight: 700;
+  }
+  .flow-node:last-child::after { display: none; }
+  @media (max-width: 820px) { .flow-node::after { display: none; } }
+  .flow-title { font-weight: 700; color: var(--navy); font-size: 14px; margin-bottom: 6px; }
+  .flow-sub { font-size: 11.5px; color: var(--gray); line-height: 1.4; }
+
+  .kpi-item {
+    padding: 18px 22px; border: 1px solid var(--light);
+    border-radius: 10px; background: #FFFFFF; margin-bottom: 12px;
+  }
+  .kpi-item summary {
+    cursor: pointer; display: flex; justify-content: space-between;
+    align-items: center; font-weight: 600; color: var(--navy);
+    font-size: 15.5px; list-style: none;
+  }
+  .kpi-item summary::-webkit-details-marker { display: none; }
+  .kpi-item summary::after {
+    content: '+'; font-size: 22px; color: var(--gray); font-weight: 400;
+    transition: transform 0.2s;
+  }
+  .kpi-item[open] summary::after { content: '−'; }
+  .kpi-formula {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    background: var(--paper); padding: 10px 14px;
+    border-radius: 6px; border: 1px solid var(--light);
+    margin: 10px 0 12px; color: var(--accent-dark);
+  }
+  .kpi-meta {
+    display: flex; gap: 16px; font-size: 13px; color: var(--gray);
+    padding-top: 8px; border-top: 1px dashed var(--light); flex-wrap: wrap;
+  }
+  .kpi-meta strong { color: var(--slate); margin-right: 4px; }
+
+  .ps-item {
+    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 16px; padding: 24px; background: #FFFFFF;
+    border: 1px solid var(--light); border-radius: 12px;
+    margin-bottom: 14px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .ps-item:hover { border-color: var(--accent); box-shadow: 0 6px 20px rgba(180,83,9,0.08); }
+  @media (max-width: 820px) { .ps-item { grid-template-columns: 1fr; } }
+  .ps-col-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 8px; color: var(--accent);
+  }
+  .ps-col-label::before {
+    content: ''; display: inline-block; width: 18px; height: 2px;
+    background: var(--accent); margin-right: 6px; vertical-align: middle;
+  }
+  .ps-col p { font-size: 13.5px; line-height: 1.5; color: var(--ink); margin: 0; }
+
+  .company-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 12px; margin-top: 20px;
+  }
+  @media (max-width: 820px) { .company-grid { grid-template-columns: repeat(2, 1fr); } }
+  .company-card {
+    padding: 18px; background: #FFFFFF; border: 1px solid var(--light);
+    border-radius: 10px; text-align: center; transition: all 0.15s;
+  }
+  .company-card:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .company-name { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .company-role { font-size: 11.5px; color: var(--gray); margin-top: 4px; }
+
+  .timeline { position: relative; padding-left: 34px; margin: 28px 0; }
+  .timeline::before {
+    content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px;
+    width: 2px; background: var(--light);
+  }
+  .timeline-item { position: relative; padding-bottom: 22px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -32px; top: 6px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent); border: 3px solid #FFF;
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+  .timeline-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--accent); font-weight: 600;
+    letter-spacing: 0.02em; margin-bottom: 4px;
+  }
+  .timeline-activity { font-size: 15px; color: var(--ink); line-height: 1.55; }
+  .timeline-activity strong { color: var(--navy); }
+
+  .glossary-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 14px 32px; margin-top: 20px;
+  }
+  @media (max-width: 820px) { .glossary-grid { grid-template-columns: 1fr; } }
+  .g-item { padding: 10px 0; border-bottom: 1px dashed var(--light); }
+  .g-term {
+    font-weight: 600; color: var(--navy); font-size: 14.5px;
+    display: block; margin-bottom: 3px;
+  }
+  .g-term abbr {
+    font-family: 'JetBrains Mono', monospace; background: var(--accent-soft);
+    color: var(--accent-dark); padding: 1px 7px; border-radius: 4px;
+    font-size: 12px; margin-right: 6px; font-weight: 700;
+    text-decoration: none; border: none;
+  }
+  .g-def { font-size: 13.5px; color: var(--slate); line-height: 1.5; }
+
+  footer {
+    background: var(--navy); color: #CBD5E1;
+    padding: 50px 0 30px; font-size: 14px; line-height: 1.6;
+  }
+  footer a { color: #F1F5F9; }
+  footer .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px; margin-bottom: 30px;
+  }
+  @media (max-width: 820px) { footer .footer-grid { grid-template-columns: 1fr; } }
+  footer h5 {
+    color: #FFFFFF; font-size: 13px; letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 700; margin-bottom: 12px;
+  }
+  footer p { color: #94A3B8; font-size: 13.5px; }
+  footer .stamp {
+    border-top: 1px solid #334155; padding-top: 20px;
+    font-size: 12px; color: #64748B;
+  }
+
+  .pullquote {
+    font-family: 'Fraunces', serif;
+    font-style: italic; font-size: 26px; line-height: 1.35;
+    color: var(--navy); padding: 30px 0 20px;
+    border-top: 2px solid var(--accent); border-bottom: 1px solid var(--light);
+    margin: 34px 0;
+  }
+  .pullquote::before { content: '"'; color: var(--accent); font-size: 52px;
+    font-weight: 700; line-height: 0; margin-right: 6px; vertical-align: -12px; }
+  .pullquote cite {
+    display: block; font-style: normal; font-family: 'Inter', sans-serif;
+    font-size: 13px; color: var(--gray); font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase; margin-top: 14px;
+  }
+
+  .steps { counter-reset: step; padding: 0; margin: 24px 0; list-style: none; }
+  .steps li {
+    counter-increment: step; padding-left: 56px; position: relative;
+    margin-bottom: 22px; font-size: 15px; line-height: 1.6;
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 0;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--accent); color: #FFFFFF;
+    font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .steps li strong { display: block; color: var(--navy); margin-bottom: 4px; font-size: 16px; }
+
+  /* Comparison split — GT vs MT */
+  .compare {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin: 30px 0;
+  }
+  @media (max-width: 820px) { .compare { grid-template-columns: 1fr; } }
+  .compare-side {
+    padding: 24px; border: 1px solid var(--light); border-radius: 12px;
+    background: #FFFFFF;
+  }
+  .compare-side.gt { border-top: 4px solid var(--accent); }
+  .compare-side.mt { border-top: 4px solid var(--blue); }
+  .compare-side h4 {
+    font-size: 18px; margin: 0 0 14px;
+    color: var(--navy);
+  }
+  .compare-side ul { margin-left: 18px; margin-bottom: 0; }
+  .compare-side ul li { font-size: 14px; line-height: 1.55; color: var(--slate); margin-bottom: 6px; }
+
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">The <span>Analyst</span> Desk</div>
+    <ul class="nav-links">
+      <li><a href="#industry">Industry 101</a></li>
+      <li><a href="#flow">Flow</a></li>
+      <li><a href="#sales-org">Sales Org</a></li>
+      <li><a href="#problems">Problems → Data</a></li>
+      <li><a href="#kpis">KPIs</a></li>
+      <li><a href="#career">Career</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="hero-eyebrow">Case Study Companion  ·  Series 03</span>
+    <h1>FMCG runs on <em>distribution</em>, not advertising.</h1>
+    <p class="hero-lede">
+      A senior-analyst's guide to FMCG Sales & Distribution Analytics — how mid-cap Indian FMCG
+      companies actually run, why distributor health is the most underrated metric in the business,
+      and how the analyst job translates between the warehouse and the boardroom. Read this before
+      you touch the Bhārat Foods case.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><div class="label">Domain</div><div class="value">FMCG Sales</div></div>
+      <div class="hero-meta-item"><div class="label">Companion to</div><div class="value">Bhārat Foods Q2 Review</div></div>
+      <div class="hero-meta-item"><div class="label">Reading time</div><div class="value">~22 minutes</div></div>
+      <div class="hero-meta-item"><div class="label">Level</div><div class="value">Beginner → Analyst Interview</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== SECTION 1: INDUSTRY 101 ============== -->
+<section id="industry">
+<div class="wrap narrow">
+  <div class="eyebrow">Section 01  ·  Industry 101</div>
+  <h2>What <em>is</em> FMCG, actually?</h2>
+
+  <p class="lede">
+    FMCG — Fast-Moving Consumer Goods — is the industry of products you buy every week without
+    thinking. Biscuits. Soap. Chips. Hair oil. Tea. Cola. The category sits on roughly 4–5% margin
+    at the top, sells through ~12 million Indian retail outlets at the bottom, and runs on a single
+    invisible engine: <strong>distribution</strong>.
+  </p>
+
+  <p>
+    A new D2C brand can be built with Instagram ads and a Shopify store. An FMCG brand cannot. To
+    sell ₹1,200 Cr a year of biscuits in India, you need a distribution network that physically
+    moves stock from your factory through ~800 distributors to ~4 lakh retail outlets, and refills
+    each one weekly. The size and quality of that network is the moat. <strong>You can't beat HUL
+    on distribution. You can only beat them on a category they're not focused on, in geographies
+    where their network is thin.</strong>
+  </p>
+
+  <h3>The Indian FMCG market in numbers</h3>
+  <p>
+    The Indian FMCG market is roughly ₹6 lakh crore (~$72B) in 2025 and growing at ~9% per year.
+    Three things shape it:
+  </p>
+
+  <div class="grid-3" style="margin-top: 26px;">
+    <div class="card">
+      <div class="card-kicker">Scale</div>
+      <h4>~12 million outlets</h4>
+      <p>Indian retail is dominated by kirana stores — the corner shop. Modern Trade (organised
+      retail like DMart, BigBasket, Reliance Smart) is still &lt;30% of FMCG sales.</p>
+    </div>
+    <div class="card">
+      <div class="card-kicker">Geography</div>
+      <h4>Rural is half</h4>
+      <p>Roughly 40-45% of FMCG sales come from rural India. Reach is more important than depth in
+      these markets — and the analyst's geographic lens is everything.</p>
+    </div>
+    <div class="card">
+      <div class="card-kicker">Mix shift</div>
+      <h4>Premium + Health</h4>
+      <p>Two long-running shifts: premium offerings (better quality, higher margin) and the
+      health/wellness category (oats, nut bars, low-sugar). Both reshape the analyst's category mix.</p>
+    </div>
+  </div>
+
+  <h3>General Trade vs Modern Trade — the eternal balance</h3>
+  <p>
+    Every FMCG analyst's life centres around this comparison. They are different worlds — different
+    ordering patterns, different margins, different stakeholders, different data pipelines. Don't
+    confuse them.
+  </p>
+
+  <div class="compare">
+    <div class="compare-side gt">
+      <h4>General Trade (GT)</h4>
+      <ul>
+        <li>Kirana stores — small, family-run corner shops</li>
+        <li>~70-75% of FMCG volume in India today</li>
+        <li>Order-fulfilled by distributors, restocked weekly</li>
+        <li>Data is delayed 2-4 weeks (no daily POS)</li>
+        <li>Higher gross margins for the brand</li>
+        <li>Decisions: stocking, range, scheme, billing</li>
+      </ul>
+    </div>
+    <div class="compare-side mt">
+      <h4>Modern Trade (MT)</h4>
+      <ul>
+        <li>Organised retail — DMart, BigBasket, Reliance, Croma</li>
+        <li>~22-25% of FMCG volume, growing fast</li>
+        <li>Direct billing to retailer chains, sometimes via DC</li>
+        <li>Daily POS data — much richer analytics</li>
+        <li>Lower margins (retailer takes more)</li>
+        <li>Decisions: assortment, planogram, listings, JBP</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">◆ Why this matters for you</div>
+    <p>The Bhārat Foods case has both GT and GT+MT distributors. The growth gap between them is
+    one of the most important insights in the data — and one the NSD will be testing for in your
+    deck. <strong>Modern Trade is growing roughly 3-4x faster than General Trade in this dataset.</strong>
+    A junior analyst will report aggregate growth. A senior analyst will split the channels and tell
+    the story of where the future is heading.</p>
+  </div>
+</div>
+</section>
+
+<!-- ============== SECTION 2: HOW THE FLOW WORKS ============== -->
+<section id="flow" class="alt">
+<div class="wrap">
+  <div class="narrow">
+    <div class="eyebrow">Section 02  ·  The Flow</div>
+    <h2>From factory to consumer — <em>the FMCG pipeline</em></h2>
+    <p class="lede">
+      Most analytics students have never seen a real FMCG distribution flow. Understanding it is the
+      single biggest unlock for reading FMCG data correctly. Here's the sequence stock travels — and
+      where the data gets generated.
+    </p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-node" style="background: var(--accent-soft);">
+      <div class="flow-title">Factory / Plant</div>
+      <div class="flow-sub">Manufactures<br/>products</div>
+    </div>
+    <div class="flow-node" style="background: var(--gold-soft);">
+      <div class="flow-title">Depot / CFA</div>
+      <div class="flow-sub">Carrying &amp; Forwarding Agent — stocking layer</div>
+    </div>
+    <div class="flow-node" style="background: var(--blue-soft);">
+      <div class="flow-title">Distributor</div>
+      <div class="flow-sub">Local stockist — owns inventory + credit risk</div>
+    </div>
+    <div class="flow-node" style="background: var(--green-soft);">
+      <div class="flow-title">Retail Outlet</div>
+      <div class="flow-sub">Kirana / Modern Trade / E-com</div>
+    </div>
+    <div class="flow-node" style="background: var(--purple-soft);">
+      <div class="flow-title">Consumer</div>
+      <div class="flow-sub">End buyer — the final ₹</div>
+    </div>
+  </div>
+
+  <div class="narrow">
+    <h3>The two transactions that matter most</h3>
+    <p>
+      In FMCG analytics, every conversation eventually comes back to two transactions. Master these
+      and you'll understand why the secondary-to-primary ratio is the single most important
+      diagnostic in the Bhārat Foods case.
+    </p>
+
+    <div class="grid-2" style="margin-top: 24px;">
+      <div class="card">
+        <div class="card-kicker">Sell-In</div>
+        <h4>Primary Sales</h4>
+        <p>Company → Distributor billing. This is what the company books as revenue. It happens
+        when the distributor places an order. <strong>Easy to inflate</strong> — if the distributor
+        agrees to take more stock than they need (often because they got a scheme discount), primary
+        sales look great. But the stock isn't moving to consumers.</p>
+      </div>
+      <div class="card">
+        <div class="card-kicker">Sell-Out</div>
+        <h4>Secondary Sales</h4>
+        <p>Distributor → Retailer movement. This is the truer measure of consumer demand. If
+        secondary is healthy, the distributor will reorder soon. If secondary is weak, the
+        distributor's warehouse fills up — and they'll skip the next order, return stock, or pay
+        late. <strong>This is the leading indicator</strong> the senior analysts watch.</p>
+      </div>
+    </div>
+
+    <div class="callout green" style="margin-top: 24px;">
+      <div class="callout-title">★ The single most important sentence in this primer</div>
+      <p>When primary sales hold flat but secondary sales fall, you have a stocking-without-selling
+      problem. The distributor's warehouse is filling up. Within 60-90 days, this almost always
+      becomes late payment, returned stock, and eventual termination. <strong>The
+      secondary-to-primary ratio falling below 0.70 is the FMCG equivalent of a fever — the body
+      knows something is wrong before the symptoms become visible.</strong> Build your Distributor
+      Health Score around this insight.</p>
+    </div>
+
+    <h3>Why distributors exist (and why they're brutal to manage)</h3>
+    <p>
+      A first-time analyst often asks: "why doesn't the company just sell directly to retailers?"
+      It's a great question with a complicated answer. Distributors exist because:
+    </p>
+    <ul>
+      <li><strong>Geographic capillarity</strong> — Bhārat Foods can't physically have a salesman in
+      every of the 50 cities and 4 lakh outlets. Distributors do that work locally.</li>
+      <li><strong>Credit absorption</strong> — Distributors give 7-21 days credit to retailers. The
+      brand bills the distributor and is paid in 30-45 days. Without distributors, the brand would
+      need to be a bank.</li>
+      <li><strong>Inventory holding</strong> — Distributors keep 21-30 days of stock locally. The
+      brand doesn't need to maintain that working capital.</li>
+      <li><strong>Local relationships</strong> — A distributor knows their kiranas personally. New
+      product launches, schemes, and credit issues all run through that relationship.</li>
+    </ul>
+    <p>
+      But distributors are also a structural risk. They <strong>own the customer relationship</strong>
+      with retailers. If a distributor fails or switches to a competitor, the brand can lose 6 months
+      of presence in that geography. This is why distributor health is not just an analytics topic
+      — it's an existential one.
+    </p>
+  </div>
+</div>
+</section>
+
+<!-- ============== SECTION 3: SALES ORG STRUCTURE ============== -->
+<section id="sales-org">
+<div class="wrap narrow">
+  <div class="eyebrow">Section 03  ·  Org Structure</div>
+  <h2>The FMCG sales org — <em>NSD to Salesman</em></h2>
+
+  <p class="lede">
+    Every FMCG sales organisation in India follows roughly the same hierarchy. Understanding it
+    matters because your analytics will be consumed up and down this chain — each level reads the
+    same data with different eyes.
+  </p>
+
+  <div class="org-chart">
+    <div class="org-row">
+      <div class="org-bar">NSD</div>
+      <div class="org-desc"><strong>National Sales Director</strong>One person. Owns national P&amp;L. Reports to CEO. Reads your deck on a 14-inch screen on a flight.</div>
+    </div>
+    <div class="org-row">
+      <div class="org-bar">RSM × 4</div>
+      <div class="org-desc"><strong>Regional Sales Manager</strong>One per zone (North, West, South, East). 200 distributors each. Reads your deck zone-filtered.</div>
+    </div>
+    <div class="org-row">
+      <div class="org-bar">ASM × ~30</div>
+      <div class="org-desc"><strong>Area Sales Manager</strong>State or sub-zone. ~25-30 distributors each. The first level that reads your deck distributor-by-distributor.</div>
+    </div>
+    <div class="org-row">
+      <div class="org-bar">SO × ~120</div>
+      <div class="org-desc"><strong>Sales Officer</strong>Town/district. ~6-8 distributors each. Daily field reality. They know which retailers are sick.</div>
+    </div>
+    <div class="org-row">
+      <div class="org-bar">PSR / Salesman × ~2400</div>
+      <div class="org-desc"><strong>Pilot Sales Representative</strong>One PSR per ~150 retail outlets. Books orders manually. Their handheld device is where data is born.</div>
+    </div>
+  </div>
+
+  <h3>What each level cares about — and how they read your data</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Level</th><th>Time Horizon</th><th>What They Want From Your Deck</th></tr></thead>
+    <tbody>
+      <tr><td><strong>NSD</strong></td><td>Quarter, year</td><td>Total picture. Channel mix. Category health. Strategic direction.</td></tr>
+      <tr><td><strong>RSM</strong></td><td>Month</td><td>Their zone vs national. Which states are dragging. Distributor performance ranking.</td></tr>
+      <tr><td><strong>ASM</strong></td><td>Week, month</td><td>Distributor-level scorecard. Sec/Pri ratios. Payment health. Range-selling.</td></tr>
+      <tr><td><strong>SO</strong></td><td>Day, week</td><td>Outlet-level performance. Which retailers stopped ordering. Beat plan compliance.</td></tr>
+      <tr><td><strong>PSR</strong></td><td>Day</td><td>Today's beat. Today's call success. Today's order volume.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout purple">
+    <div class="callout-title">◆ Why this matters in your deck</div>
+    <p>The Bhārat Foods case asks you to address multiple stakeholders. The NSD wants the headline
+    story. The ASM wants the distributor scorecard. The CEO wants the strategic recommendation.
+    <strong>One deck cannot satisfy all of them in the same chart.</strong> Senior analysts build
+    drill-down structure: a top-line view that answers the NSD, with appendix detail that answers
+    the ASM. Plan that structure before you start building.</p>
+  </div>
+</div>
+</section>
+
+<!-- ============== SECTION 4: VOCABULARY ============== -->
+<section id="vocabulary" class="alt">
+<div class="wrap narrow">
+  <div class="eyebrow">Section 04  ·  Vocabulary</div>
+  <h2>The words that <em>separate</em> you from a textbook analyst</h2>
+
+  <p class="lede">
+    Every industry has a vocabulary that immediately tells someone whether you're an outsider or an
+    insider. FMCG is especially rich. Master these terms — every one will come up if you interview
+    at HUL, ITC, Britannia, Dabur, Marico, or Tata Consumer.
+  </p>
+
+  <h3>The distribution vocabulary</h3>
+  <ul>
+    <li><strong>Beat</strong> — A salesman's daily route through assigned retail outlets. Each PSR
+    has 5-6 beats per week. A 'covered beat' = all planned outlets visited.</li>
+    <li><strong>Outlet coverage / numeric distribution</strong> — % of reachable outlets that
+    actually stock your product. Different from <em>weighted distribution</em>, which weights by
+    outlet sales volume.</li>
+    <li><strong>Range / Range-selling</strong> — How many SKUs each outlet stocks. A retailer
+    stocking only your top SKU has poor range. A retailer stocking 8+ SKUs is a 'range-selling'
+    outlet — much more valuable.</li>
+    <li><strong>Depth of assortment (ECO)</strong> — Effective Coverage of Outlets. How many SKUs an
+    outlet actually moves regularly, not just stocks.</li>
+    <li><strong>MSL</strong> — Must Stock List. The minimum SKUs the brand expects every outlet of a
+    certain class to carry. MSL compliance is a key audit metric.</li>
+    <li><strong>Dispatch vs Billing</strong> — Stock physically leaving the depot vs invoiced.
+    Quarter-end is famous for billing-without-dispatch (recognising sales without moving stock) —
+    a common audit issue.</li>
+    <li><strong>Damages / NRGP</strong> — Damaged stock returned. NRGP = Non-Returnable Gate Pass —
+    the document that tracks it.</li>
+  </ul>
+
+  <h3>The trade-promotion vocabulary</h3>
+  <ul>
+    <li><strong>Trade Margin</strong> — The percentage between billing price and MRP that the
+    distributor + retailer share. Typically 15-20% of MRP for biscuits, 25-30% for snacks/HFD.</li>
+    <li><strong>BTL (Below-the-Line)</strong> — Trade promotions, scheme spend, in-store
+    activation. As opposed to ATL (Above-the-Line) which is mass media advertising.</li>
+    <li><strong>BOGO</strong> — Buy One Get One. The most common consumer scheme.</li>
+    <li><strong>Display Allowance</strong> — Cash paid to retailers for prominent placement
+    (eye-level shelf, end-cap). A staple in modern trade.</li>
+    <li><strong>Slotting Fee</strong> — Listing fee paid to modern-trade chains to introduce a new
+    SKU. Can be ₹5L–₹50L per SKU per chain.</li>
+    <li><strong>JBP</strong> — Joint Business Plan. Annual agreement between brand and modern-trade
+    chain on volume targets, promotion calendar, listings, payment terms.</li>
+    <li><strong>Trade-Promo ROI</strong> — Incremental sales generated ÷ scheme cost. Healthy is
+    ≥2.5x. Below 1.0x = value destroyed.</li>
+  </ul>
+
+  <h3>The financial vocabulary</h3>
+  <ul>
+    <li><strong>Gross Sales</strong> — Total billed value before discounts, schemes, returns.</li>
+    <li><strong>Net Sales</strong> — Gross − discounts − schemes − returns. The number the CFO
+    actually cares about.</li>
+    <li><strong>Sec/Pri ratio</strong> — Secondary sales ÷ Primary sales. ≥0.85 is healthy. &lt;0.70
+    is a red flag. The single most important leading indicator in FMCG.</li>
+    <li><strong>Stock Days</strong> — Days of inventory at distributor level. 21-30 is healthy.
+    50+ is a warning sign.</li>
+    <li><strong>Credit Period</strong> — Days the distributor has to pay. Typical: 21-45 days.</li>
+    <li><strong>Overdue / DSO</strong> — Days Sales Outstanding. Average days a rupee billed waits
+    to be collected. Higher = cash trapped at distributor level.</li>
+  </ul>
+
+  <div class="pullquote">
+    The first time a candidate uses 'sell-in vs sell-out' or 'secondary-to-primary' correctly in an
+    interview, every FMCG hiring manager smiles. They know they're talking to someone who has
+    actually thought about how the business works.
+    <cite>— A Head of Sales Analytics at a top-5 Indian FMCG, on what separates good interviewees</cite>
+  </div>
+</div>
+</section>
+
+<!-- ============== SECTION 5: PROBLEMS → DATA ============== -->
+<section id="problems">
+<div class="wrap">
+  <div class="narrow">
+    <div class="eyebrow">Section 05  ·  From business problem to data answer</div>
+    <h2>The real questions FMCG leaders ask — and how an analyst <em>translates</em> them</h2>
+    <p class="lede">
+      The NSD doesn't walk in and ask "please calculate the secondary-to-primary ratio segmented by
+      tier." They ask things like "are we burning cash on schemes?" Your job is to translate that
+      into an answerable data question, run the numbers, and translate the answer back into a
+      business decision. The Bhārat Foods case is essentially the first 5 of these, rolled together.
+    </p>
+  </div>
+
+  <div class="ps-item">
+    <div class="ps-col"><div class="ps-col-label">1. Business Problem</div><p><em>"Q2 looks good on top — is the growth real?"</em> — NSD before a board review</p></div>
+    <div class="ps-col"><div class="ps-col-label">Data Question</div><p>Decompose Q2 growth into category × channel × tier. Distinguish primary growth from secondary. Identify how much is propped up by trade-promo discounts.</p></div>
+    <div class="ps-col"><div class="ps-col-label">Analytical Approach</div><p>Side-by-side primary vs secondary by category. Trade-promo dependency ratio (promoted volume ÷ total volume) per category.</p></div>
+    <div class="ps-col"><div class="ps-col-label">Decision it Drives</div><p>How much of the headline number to celebrate. Whether to slow down promo spend in Q3.</p></div>
+  </div>
+
+  <div class="ps-item">
+    <div class="ps-col"><div class="ps-col-label">2. Business Problem</div><p><em>"Which 50 distributors should I rescue and which 50 should I replace?"</em> — RSM running a quarterly review</p></div>
+    <div class="ps-col"><div class="ps-col-label">Data Question</div><p>Build a composite Distributor Health Score from 6-8 features (sec/pri, payment days, range-selling, returns, ASM cadence, training).</p></div>
+    <div class="ps-col"><div class="ps-col-label">Analytical Approach</div><p>Weighted scorecard. Validate against historical 'bad distributor' outcomes. Tier them: Healthy / Watch / At-Risk / Critical.</p></div>
+    <div class="ps-col"><div class="ps-col-label">Decision it Drives</div><p>Which distributors get reward, ASM intervention, credit hold, or termination notice.</p></div>
+  </div>
+
+  <div class="ps-item">
+    <div class="ps-col"><div class="ps-col-label">3. Business Problem</div><p><em>"Are our trade promotions earning back?"</em> — CFO before annual budget setting</p></div>
+    <div class="ps-col"><div class="ps-col-label">Data Question</div><p>For every scheme run, compute incremental sales lift vs scheme cost. Distinguish forward-buying (volume that would have happened anyway) from genuine demand creation.</p></div>
+    <div class="ps-col"><div class="ps-col-label">Analytical Approach</div><p>Baseline forecast vs scheme-period actuals. Per-scheme ROI. Distribution of ROI across scheme types and categories.</p></div>
+    <div class="ps-col"><div class="ps-col-label">Decision it Drives</div><p>Which schemes to scale, redesign, or kill. Q3 promo budget allocation.</p></div>
+  </div>
+
+  <div class="ps-item">
+    <div class="ps-col"><div class="ps-col-label">4. Business Problem</div><p><em>"Where do we put the next ₹40 Cr — defend or expand?"</em> — CEO with quarterly capital to allocate</p></div>
+    <div class="ps-col"><div class="ps-col-label">Data Question</div><p>Quantify defensive ROI (₹ exposure saved per ₹ of distributor remediation) vs offensive ROI (₹ market opportunity per ₹ of city expansion). Pick a split.</p></div>
+    <div class="ps-col"><div class="ps-col-label">Analytical Approach</div><p>Defensive: Health Score outputs × intervention cost matrix. Offensive: City prioritisation using market size, current penetration, competitive intensity, MT share, feasibility.</p></div>
+    <div class="ps-col"><div class="ps-col-label">Decision it Drives</div><p>How the company actually deploys ₹40 Cr in the coming quarter. Career-defining recommendation.</p></div>
+  </div>
+
+  <div class="ps-item">
+    <div class="ps-col"><div class="ps-col-label">5. Business Problem</div><p><em>"This new launch is doing great — or is it?"</em> — CMO defending Health Foods category investment</p></div>
+    <div class="ps-col"><div class="ps-col-label">Data Question</div><p>Strip out trade-promo lift from launch growth. What's the underlying demand? What share of growth survives if promo is removed?</p></div>
+    <div class="ps-col"><div class="ps-col-label">Analytical Approach</div><p>Promoted vs non-promoted volume comparison. Compare to category benchmarks. Test: cohort of outlets that received no scheme.</p></div>
+    <div class="ps-col"><div class="ps-col-label">Decision it Drives</div><p>Whether to scale the category or restructure the launch. Career risk for the brand manager.</p></div>
+  </div>
+
+  <div class="ps-item">
+    <div class="ps-col"><div class="ps-col-label">6. Business Problem</div><p><em>"Tier-2 and Tier-3 are growing faster than Tier-1 — where do we go deeper?"</em> — Strategy lead</p></div>
+    <div class="ps-col"><div class="ps-col-label">Data Question</div><p>Quantify the growth premium of Tier-2/3 vs Tier-1. Identify the cities where the gap is largest. Score each city on penetration headroom + competitive intensity.</p></div>
+    <div class="ps-col"><div class="ps-col-label">Analytical Approach</div><p>City-tier growth comparison. City-level penetration analysis. Competitive intensity scoring. Feasibility filter.</p></div>
+    <div class="ps-col"><div class="ps-col-label">Decision it Drives</div><p>Which cities receive new distributor appointments, sales-rep additions, market-development investment.</p></div>
+  </div>
+
+  <div class="ps-item">
+    <div class="ps-col"><div class="ps-col-label">7. Business Problem</div><p><em>"Our Beverages numbers are off in the South — is it us or them?"</em> — South Region RSM</p></div>
+    <div class="ps-col"><div class="ps-col-label">Data Question</div><p>Is the dip widespread or concentrated? Which states show steepest declines? Is it primary or secondary that's falling? Could it be competitor activity?</p></div>
+    <div class="ps-col"><div class="ps-col-label">Analytical Approach</div><p>State × month sales trends. Compare to other zones. Look for sudden discontinuities. Cross-check with returns and scheme data.</p></div>
+    <div class="ps-col"><div class="ps-col-label">Decision it Drives</div><p>Whether to launch counter-scheme, do a market visit, or escalate to the CMO for brand-level intervention.</p></div>
+  </div>
+
+  <div class="ps-item">
+    <div class="ps-col"><div class="ps-col-label">8. Business Problem</div><p><em>"Modern Trade is growing 3x faster than GT — should we lean in?"</em> — CEO planning 5-year strategy</p></div>
+    <div class="ps-col"><div class="ps-col-label">Data Question</div><p>What % of MT sales come through GT+MT distributors vs direct? What's the margin trade-off? Is the MT growth coming from new outlets or deeper share?</p></div>
+    <div class="ps-col"><div class="ps-col-label">Analytical Approach</div><p>GT+MT distributor performance vs GT-only. Margin analysis by channel. New vs repeat MT account growth.</p></div>
+    <div class="ps-col"><div class="ps-col-label">Decision it Drives</div><p>How much to invest in MT-capable distributor onboarding vs direct MT relationships. 5-year channel strategy.</p></div>
+  </div>
+</div>
+</section>
+
+<!-- ============== SECTION 6: DAY IN LIFE ============== -->
+<section id="day-in-life" class="alt">
+<div class="wrap narrow">
+  <div class="eyebrow">Section 06  ·  The Role</div>
+  <h2>A day in the life of an FMCG sales analyst</h2>
+  <p class="lede">
+    A composite Tuesday at the HQ of a mid-cap FMCG company. Almost none of this is the
+    "machine-learning data scientist" work students imagine. Most of it is translation: fuzzy
+    business questions in, sharp numeric answers out, business decisions back.
+  </p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-time">08:50</div>
+      <div class="timeline-activity">Open laptop. The morning sales-status email is already in: yesterday's primary billing was 4% below run-rate. Slack from the West RSM: "what happened?"</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">09:15</div>
+      <div class="timeline-activity">Pull yesterday's billing by zone and category. The miss is concentrated in West, in Beverages. Two large distributors didn't place their weekly order.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">10:00</div>
+      <div class="timeline-activity"><strong>NSD's daily 10am call.</strong> "What's the West story?" You explain the two distributors. NSD: "Are they sitting on stock?" You check sec/pri ratio for both — yes, both at 0.55. "OK, get the ASM on a call. We're not pushing more stock until they sell what they have."</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">11:30</div>
+      <div class="timeline-activity">Build the monthly distributor scorecard for the upcoming Wednesday review. 800 distributors ranked on a composite score. Highlight: 47 distributors below 50/100 — the AT-RISK list.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">13:00</div>
+      <div class="timeline-activity">Lunch with the Modern Trade team. They're asking for last quarter's MT growth split by chain — DMart vs BigBasket vs Reliance Smart. Promise to send by EOD.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">14:30</div>
+      <div class="timeline-activity"><strong>Trade-promo review with CFO.</strong> The CFO wants to know which schemes from Q2 had ROI &lt; 1.0x. Pull the analysis: 26 of 94 schemes were value-destroying, total ₹14 Cr wasted. CFO: "Why didn't anyone catch this in real time?" You explain the 30-day measurement lag. "Build me a leading-indicator dashboard."</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">16:00</div>
+      <div class="timeline-activity">Health Foods category head pings: "Need a story for the brand review. What's our growth in Tier-1 vs Tier-2/3?" You pull the cut. Tier-2 and Tier-3 are growing 4-5x faster than Tier-1 for Health Foods. Big news. You send the chart with three-line takeaway.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">17:30</div>
+      <div class="timeline-activity">South RSM Slack: "Tamil Nadu beverages has dropped 42% in Sep. WTH?" You investigate. Check schemes in that state. Check competitor activity (informally — sales reps' notes). The pattern looks like a competitor scheme has gone live. Flag it back: "Pattern matches a competitive scheme. Suggest a market visit and counter-scheme proposal by Friday."</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">19:00</div>
+      <div class="timeline-activity">Send the EOD note to the NSD with three slides: West situation (two stocking distributors flagged), Q2 promo wastage (₹14 Cr to recover), Tamil Nadu Beverages (competitor pressure to investigate). Close laptop.</div>
+    </div>
+  </div>
+
+  <div class="callout green">
+    <div class="callout-title">★ What you actually get paid for</div>
+    <p>Notice how much of the day is translation, not computation. The NSD doesn't want a chart —
+    they want to know whether to get on a flight to West tomorrow. The CFO doesn't want a list of
+    schemes — they want to know who's accountable for the wastage. The category head doesn't want a
+    growth number — they want a story for their brand review.
+    <strong>Great FMCG analysts don't just answer the question they were asked. They translate
+    questions into decisions and decisions back into actions.</strong>
+    Numbers tell you what happened. Business judgment tells you what to do. You need both.</p>
+  </div>
+</div>
+</section>
+
+<!-- ============== SECTION 7: KPIs ============== -->
+<section id="kpis">
+<div class="wrap narrow">
+  <div class="eyebrow">Section 07  ·  The Language</div>
+  <h2>KPI Dictionary — the words you <em>must</em> know cold</h2>
+  <p class="lede">
+    Every metric below shows up in the Bhārat Foods case. Master these before you touch the data. Click to expand.
+  </p>
+
+  <h3>Sales performance metrics</h3>
+
+  <details class="kpi-item" open>
+    <summary>Primary Sales</summary>
+    <div class="kpi-formula">Primary Sales (Value)  =  Σ (billed_units × billing_price)</div>
+    <p>Company → Distributor billing. The headline revenue number. Booked when the distributor places
+    an order, regardless of whether retailers buy. Watch out for end-of-quarter inflation.</p>
+    <div class="kpi-meta"><span><strong>Benchmark:</strong> +9% YoY value growth for mid-cap FMCG.</span></div>
+  </details>
+
+  <details class="kpi-item">
+    <summary>Secondary Sales</summary>
+    <div class="kpi-formula">Secondary Sales  =  Σ (cases moved from distributor to retailer)</div>
+    <p>The truer demand signal. When secondary tracks primary closely, the distribution channel is
+    healthy. When primary grows but secondary doesn't, you have a stocking-without-selling problem.</p>
+  </details>
+
+  <details class="kpi-item">
+    <summary>Sec/Pri Ratio (Secondary-to-Primary Ratio)</summary>
+    <div class="kpi-formula">Sec/Pri Ratio  =  Σ Secondary Sales  /  Σ Primary Sales   (same period)</div>
+    <p><strong>The single most important leading indicator in FMCG distribution.</strong> ≥0.85 is
+    healthy, 0.70-0.85 is watch, &lt;0.70 is red flag, &lt;0.50 is critical. By the time payment days
+    slip, this ratio has been falling for 60-90 days.</p>
+    <div class="kpi-meta"><span><strong>Benchmark:</strong> ≥0.85 healthy.</span></div>
+  </details>
+
+  <details class="kpi-item">
+    <summary>Range Selling (Active SKU %)</summary>
+    <div class="kpi-formula">Range Selling %  =  SKUs actively sold by distributor / SKUs handled  × 100%</div>
+    <p>Quality of distribution. A distributor handling 22 SKUs but only actively moving 9 has poor
+    range. Predicts long-term distributor health better than total volume.</p>
+    <div class="kpi-meta"><span><strong>Benchmark:</strong> 65%.</span></div>
+  </details>
+
+  <details class="kpi-item">
+    <summary>Outlet Coverage (Numeric Distribution)</summary>
+    <div class="kpi-formula">Numeric Distribution  =  Outlets stocking your product / Total reachable outlets  × 100%</div>
+    <p>Quantity of distribution. Different from <em>weighted distribution</em>, which weights by
+    outlet sales volume. A 65% numeric / 88% weighted distribution means you're in the 65% of
+    outlets that drive 88% of category sales — the right ones.</p>
+    <div class="kpi-meta"><span><strong>Benchmark:</strong> 65% numeric for mid-cap FMCG.</span></div>
+  </details>
+
+  <h3>Distributor health metrics</h3>
+
+  <details class="kpi-item">
+    <summary>Average Payment Days / DSO</summary>
+    <div class="kpi-formula">DSO  =  Σ (actual payment days × billed value) / Σ billed value</div>
+    <p>Days Sales Outstanding. How many days a rupee billed takes to come back. Direct cash-flow
+    impact. Late payment is one of three classic FMCG distributor failure signals.</p>
+    <div class="kpi-meta"><span><strong>Benchmark:</strong> ≤ credit terms (typically 30 days).</span></div>
+  </details>
+
+  <details class="kpi-item">
+    <summary>Return Rate</summary>
+    <div class="kpi-formula">Return Rate %  =  Return value / Primary value  × 100%</div>
+    <p>How much stock comes back from distributor. High returns indicate near-expiry stock,
+    quality issues, or — most often — distributor overstocking.</p>
+    <div class="kpi-meta"><span><strong>Benchmark:</strong> ≤ 3.5%.</span></div>
+  </details>
+
+  <details class="kpi-item">
+    <summary>Stock Days at Distributor</summary>
+    <div class="kpi-formula">Stock Days  =  (Stock holding × 30) / Monthly secondary sales</div>
+    <p>How many days of inventory the distributor is sitting on at any point. 21-30 days is
+    healthy. 50+ is a warning. 70+ means returns are coming.</p>
+  </details>
+
+  <h3>Trade promotion metrics</h3>
+
+  <details class="kpi-item">
+    <summary>Trade-Promo ROI</summary>
+    <div class="kpi-formula">Trade-Promo ROI  =  Incremental Sales / Scheme Cost   (multiple)</div>
+    <p>The headline ROI metric. Above 2.5x is healthy. Below 1.0x is value-destroying — you spent
+    more on the discount than you earned in extra sales. Most FMCG companies have 20-30% of schemes
+    in the value-destroying category at any time.</p>
+    <div class="kpi-meta"><span><strong>Benchmark:</strong> 2.5x; ≤25% schemes negative.</span></div>
+  </details>
+
+  <details class="kpi-item">
+    <summary>Incremental Sales (Lift)</summary>
+    <div class="kpi-formula">Incremental Sales  =  Sales during scheme period  −  Baseline forecast</div>
+    <p>The 'extra' sales attributable to the scheme. The hard part is the baseline — it's the sales
+    that would have happened anyway. Underestimating the baseline overstates the ROI. This is
+    where most analyst careers get tested.</p>
+  </details>
+
+  <details class="kpi-item">
+    <summary>Promo Dependency</summary>
+    <div class="kpi-formula">Promo Dependency  =  Promoted volume / Total volume   (per category)</div>
+    <p>What share of a category's volume is moving on promotion. A 'healthy' brand has 15-25%
+    dependency. A category with 50%+ promo dependency is structurally hooked — pull the promos and
+    sales collapse.</p>
+  </details>
+
+  <h3>Geographic and channel metrics</h3>
+
+  <details class="kpi-item">
+    <summary>City-Tier Mix</summary>
+    <div class="kpi-formula">Tier mix  =  Sales from each tier / Total sales</div>
+    <p>How sales split across Tier-1, Tier-2, Tier-3 (and rural for some companies). The growth
+    premium of Tier-2/3 over Tier-1 in the last 5 years has reshaped FMCG strategy across the country.</p>
+  </details>
+
+  <details class="kpi-item">
+    <summary>Channel Mix (GT vs MT vs E-Com)</summary>
+    <div class="kpi-formula">Channel Mix %  =  Channel sales / Total sales</div>
+    <p>India FMCG: ~70% GT, ~22% MT, ~5-7% E-Com. Mix is shifting toward MT and E-Com fast — and
+    each channel has different margin economics. Your mix today predicts your margin tomorrow.</p>
+  </details>
+
+  <details class="kpi-item">
+    <summary>Modern Trade Growth Premium</summary>
+    <div class="kpi-formula">MT Growth Premium  =  MT YoY % growth  /  GT YoY % growth</div>
+    <p>How fast MT is outpacing GT. Currently 3-4x in many categories. This single number is
+    reshaping FMCG investment priorities — sales-org structure, distributor capability, JBP
+    discipline, listing fees, the works.</p>
+  </details>
+</div>
+</section>
+
+<!-- ============== SECTION 8: COMPANIES + CAREERS ============== -->
+<section id="career" class="alt">
+<div class="wrap">
+  <div class="narrow">
+    <div class="eyebrow">Section 08  ·  Career</div>
+    <h2>Where this role <em>takes you</em></h2>
+    <p class="lede">
+      FMCG analytics is one of the most underrated entry paths in Indian analytics. Every consumer
+      goods company has a sizable analytics team. The work is tangible — you can walk into a kirana
+      and see your decisions on the shelf. The career path is long, well-paid, and respected.
+    </p>
+  </div>
+
+  <div class="narrow">
+    <h3>Companies actively hiring FMCG analysts (India, 2025)</h3>
+    <div class="company-grid">
+      <div class="company-card"><div class="company-name">Hindustan Unilever (HUL)</div><div class="company-role">Largest FMCG in India. ~1500 analytics roles. Hires across all categories.</div></div>
+      <div class="company-card"><div class="company-name">ITC</div><div class="company-role">Diversified portfolio. Strong analytics teams in foods (Aashirvaad, Sunfeast) + personal care.</div></div>
+      <div class="company-card"><div class="company-name">Britannia</div><div class="company-role">Biscuits leader. Sales analytics + RGM (Revenue Growth Management) hiring heavily.</div></div>
+      <div class="company-card"><div class="company-name">Dabur</div><div class="company-role">Healthcare + foods. Strong rural distribution analytics function.</div></div>
+      <div class="company-card"><div class="company-name">Marico</div><div class="company-role">Hair + foods. Known for advanced analytics maturity for company size.</div></div>
+      <div class="company-card"><div class="company-name">Tata Consumer Products</div><div class="company-role">Tea + salt + foods. Growing analytics function post-Tata Salt + Sampann integration.</div></div>
+      <div class="company-card"><div class="company-name">Nestlé India</div><div class="company-role">MNC with deep analytics culture. Foods + nutrition + beverages.</div></div>
+      <div class="company-card"><div class="company-name">Parle Products</div><div class="company-role">Largest biscuits player by volume. Conservative but analytics-investing now.</div></div>
+      <div class="company-card"><div class="company-name">Mondelez India</div><div class="company-role">Cadbury + Bournvita + Oreo. Strong RGM and trade-promo analytics culture.</div></div>
+      <div class="company-card"><div class="company-name">Reckitt</div><div class="company-role">Dettol + Harpic + Veet. Analytics teams sit globally + locally.</div></div>
+      <div class="company-card"><div class="company-name">Adani Wilmar</div><div class="company-role">Foods (Fortune oil + atta + rice). Newer analytics function, growing fast.</div></div>
+      <div class="company-card"><div class="company-name">Patanjali</div><div class="company-role">Indian-origin disruptor. Analytics catching up with scale.</div></div>
+    </div>
+
+    <h3>D2C-era FMCG players (also hiring)</h3>
+    <div class="company-grid">
+      <div class="company-card"><div class="company-name">The Whole Truth</div><div class="company-role">Health foods D2C. Direct-to-consumer + retail.</div></div>
+      <div class="company-card"><div class="company-name">Yogabar</div><div class="company-role">Health foods (acquired by ITC). Hybrid D2C + retail playbook.</div></div>
+      <div class="company-card"><div class="company-name">Mamaearth / Honasa</div><div class="company-role">Personal care D2C. Aggressive analytics hiring.</div></div>
+      <div class="company-card"><div class="company-name">Slurrp Farm / Wholsum</div><div class="company-role">Kids foods D2C-first.</div></div>
+    </div>
+
+    <h3>Typical career trajectories</h3>
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Stage</th><th>Title</th><th>Years</th><th>India Comp (2025)</th><th>What you do</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Entry</td><td>Sales Analyst / RGM Analyst</td><td>0–2</td><td>₹8 – ₹16L</td><td>Daily/weekly reports, dashboards, ad-hoc pulls</td></tr>
+        <tr><td>Mid</td><td>Senior Analyst / Manager-Sales Analytics</td><td>2–5</td><td>₹16 – ₹35L</td><td>Own a category or zone. Build models. Influence trade decisions</td></tr>
+        <tr><td>Senior</td><td>Head of Sales Analytics / RGM Lead</td><td>5–10</td><td>₹35L – ₹1Cr</td><td>Lead the team. Own the trade-promo + pricing P&amp;L lever</td></tr>
+        <tr><td>Leader</td><td>Sales Strategy Director / VP Insights</td><td>10+</td><td>₹1Cr+</td><td>Own the customer + sales strategy function. Report to CSO/CMO</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">◆ A note on pivots from FMCG analytics</div>
+      <p>FMCG analytics is one of the most pivot-rich seats in Indian analytics. From here you can credibly
+      move into: <strong>Revenue Growth Management (RGM)</strong> — the highest-ROI analyst function at modern FMCG companies;
+      <strong>Strategy / consulting</strong> — McKinsey/BCG/Bain hire FMCG analysts for FMCG client work;
+      <strong>D2C / startups</strong> — your distribution understanding is gold for any consumer-goods startup;
+      <strong>Modern Trade analytics</strong> — DMart, BigBasket, Reliance Smart, Zepto, Blinkit hire from this pool;
+      or <strong>brand-side roles</strong> — many FMCG analysts move into brand management after 4-5 years.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============== SECTION 9: TOOLKIT ============== -->
+<section id="tools">
+<div class="wrap narrow">
+  <div class="eyebrow">Section 09  ·  Toolkit</div>
+  <h2>The tools you'll actually use</h2>
+
+  <p class="lede">
+    Like every analyst role, the stated stack and the actual stack are different. Here's the
+    honest breakdown by how much of your time each tool eats in an FMCG sales analytics job.
+  </p>
+
+  <ol class="steps">
+    <li><strong>Excel</strong> — 40-50% of your time. The bedrock. Pivot tables, SUMIFS, XLOOKUP,
+    Power Query, weighted scorecards in SUMPRODUCT. Most FMCG executive reports still land here.</li>
+    <li><strong>SQL</strong> — 25-30%. Increasingly important as data warehouses replace flat-file
+    SAP exports. Learn window functions, CTEs, and how to join 6+ tables.</li>
+    <li><strong>BI tool (Power BI / Tableau)</strong> — 15%. Most FMCG companies have weekly /
+    monthly dashboards refreshed from the warehouse. You'll build and maintain.</li>
+    <li><strong>SAP / Oracle / DMS exports</strong> — 5-10%. Pulling raw data from the company's ERP
+    is a specific skill. Lots of T-codes, weird formats, missing values.</li>
+    <li><strong>Python (pandas)</strong> — 5%. For the harder work — large dataset cleanup,
+    statistical analysis, time-series forecasting. Not yet table-stakes at most Indian FMCG, but
+    increasingly so.</li>
+    <li><strong>Storytelling</strong> — always. The analysts who grow fastest are the ones who can
+    turn a 60-row pivot into a three-slide story the NSD can act on.</li>
+  </ol>
+
+  <div class="callout blue">
+    <div class="callout-title">◆ The honest advice no one gives you</div>
+    <p>The FMCG analysts who get promoted quickest are not the ones who master the most tools.
+    They're the ones who <strong>understand the field</strong>. Walk into a kirana store once a
+    quarter. Visit a distributor's warehouse. Ride along on a salesman's beat. The patterns in your
+    data make sense once you've seen the reality the data describes. Pure desk analysts plateau
+    fast. Field-aware analysts become senior.</p>
+  </div>
+</div>
+</section>
+
+<!-- ============== SECTION 10: APPROACH ============== -->
+<section id="approach" class="alt">
+<div class="wrap narrow">
+  <div class="eyebrow">Section 10  ·  Approach</div>
+  <h2>How to actually tackle the Bhārat Foods case</h2>
+  <p class="lede">
+    You now know enough context. Here's the sequence to follow if you were opening the workbook
+    fresh. Don't be tempted to start on the Distributor Health Score — it'll be weaker if you
+    haven't first understood the underlying performance story.
+  </p>
+
+  <ol class="steps">
+    <li><strong>Read the case doc twice, cover-to-cover.</strong> First pass: absorb the context and
+    stakeholders. Second pass: underline each specific analysis question and required metric.
+    Don't open the Excel yet.</li>
+    <li><strong>Write the executive summary you hope to end with.</strong> Before touching data,
+    write your hypothesis. e.g. <em>"Q2 grew 8% but the growth is mix-driven; Modern Trade is
+    accelerating; Health Foods is propped by promo; 47 distributors are at-risk; recommend ₹22 Cr
+    defensive + ₹18 Cr Tier-2/3 expansion"</em>. The gap between your hypothesis and what the data
+    shows is where real insight lives.</li>
+    <li><strong>Clean the data — visibly.</strong> Unify date formats. Standardise state spellings.
+    Resolve city variants. Handle <code>\N</code>/nulls. Document every cleaning rule. 8% of
+    your grade lives here.</li>
+    <li><strong>Build the diagnostic views (Q1).</strong> Q2 vs Q1 by category, channel, zone,
+    tier. Every view compared to benchmark, with green/amber/red flags.</li>
+    <li><strong>Promo ROI analysis (Q2).</strong> Per-scheme ROI. Negative-ROI count. By category,
+    by mechanic. Identify the wastage.</li>
+    <li><strong>Distribution quality analysis (Q3).</strong> Outlet coverage, range-selling,
+    payment behaviour, sec/pri ratios. The operational view before scoring.</li>
+    <li><strong>Build the Distributor Health Score (Q4 capstone).</strong> Features → weights → score →
+    validate against bad-distributor outcomes → top-50 list → reasons → interventions.</li>
+    <li><strong>Build the strategic recommendation (Q5 capstone).</strong> Take Q4 outputs + Q1
+    diagnostic + city-demographics. Quantify defensive vs offensive ROI. Pick a split. Defend it.</li>
+    <li><strong>Synthesise → 3-bullet executive summary.</strong> Compare to your Step-2 hypothesis.
+    The deck-narrative writes itself when steps 4-8 are done.</li>
+    <li><strong>Build the deck.</strong> 12-16 slides, no more. Every chart with a 'so-what' title.
+    Every slide defendable.</li>
+    <li><strong>Sleep on it. Re-read. Cut 30%.</strong> The third draft is always the best.</li>
+  </ol>
+
+  <div class="callout">
+    <div class="callout-title">◆ Final nudge</div>
+    <p>FMCG is unusual among industries — its complexity is hidden in plain sight. Every Indian has
+    bought biscuits, but very few understand how those biscuits got onto the shelf. The analyst who
+    studies the system, not just the spreadsheet, becomes invaluable. Do that. The Bhārat Foods
+    case is your start. Good luck.</p>
+  </div>
+</div>
+</section>
+
+<!-- ============== SECTION 11: GLOSSARY ============== -->
+<section id="glossary">
+<div class="wrap narrow">
+  <div class="eyebrow">Section 11  ·  Glossary</div>
+  <h2>Acronyms you'll hear every day</h2>
+  <p class="lede">Bookmark this. Every one of these will come up in interviews and daily work.</p>
+
+  <div class="glossary-grid">
+    <div class="g-item"><span class="g-term"><abbr>ASM</abbr>Area Sales Manager</span><span class="g-def">Manages 25-30 distributors in a state or sub-zone.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>ATL</abbr>Above the Line</span><span class="g-def">Mass-media advertising (TV, print). Vs BTL = trade promotions.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>BOGO</abbr>Buy One Get One</span><span class="g-def">Common consumer scheme.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>BTL</abbr>Below the Line</span><span class="g-def">Trade promotions, in-store activations.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>CFA</abbr>Carrying &amp; Forwarding Agent</span><span class="g-def">Stocking layer between factory and distributor.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>CMO</abbr>Chief Marketing Officer</span><span class="g-def">Owns brand and demand creation.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>D2C</abbr>Direct to Consumer</span><span class="g-def">Brand sells directly to end users.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>DMS</abbr>Distributor Management System</span><span class="g-def">Software for managing distributor billing, inventory, returns.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>DSO</abbr>Days Sales Outstanding</span><span class="g-def">Average days to collect a billed rupee.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>ECO</abbr>Effective Coverage of Outlets</span><span class="g-def">Outlets actively moving stock, not just stocking.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>FMCG</abbr>Fast-Moving Consumer Goods</span><span class="g-def">Frequently-purchased low-cost packaged goods.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>GT</abbr>General Trade</span><span class="g-def">Kirana/traditional retail. ~70% of Indian FMCG.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>JBP</abbr>Joint Business Plan</span><span class="g-def">Annual deal between brand and modern-trade chain.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>MRP</abbr>Maximum Retail Price</span><span class="g-def">Legally binding ceiling price in India.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>MSL</abbr>Must Stock List</span><span class="g-def">Minimum SKUs an outlet of a class is expected to carry.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>MT</abbr>Modern Trade</span><span class="g-def">Organised retail (DMart, BigBasket, Reliance Smart).</span></div>
+    <div class="g-item"><span class="g-term"><abbr>NSD</abbr>National Sales Director</span><span class="g-def">Owns national sales P&amp;L.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>NRGP</abbr>Non-Returnable Gate Pass</span><span class="g-def">Document for damaged/return stock movement.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>OPI</abbr>Outlet Productivity Index</span><span class="g-def">Avg sales per outlet — distribution health metric.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>P&amp;L</abbr>Profit and Loss</span><span class="g-def">Financial accounting summary.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>POS</abbr>Point of Sale</span><span class="g-def">Retail till data — available in MT, rare in GT.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>PSR</abbr>Pilot Sales Representative</span><span class="g-def">Frontline salesman covering 100-150 outlets.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>RGM</abbr>Revenue Growth Management</span><span class="g-def">The discipline of pricing, mix, promo, trade investment.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>RSM</abbr>Regional Sales Manager</span><span class="g-def">Owns one zone (North/West/South/East).</span></div>
+    <div class="g-item"><span class="g-term"><abbr>SAP</abbr>Systems Applications &amp; Products</span><span class="g-def">Most FMCG ERP system. Where data is born.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>SKU</abbr>Stock Keeping Unit</span><span class="g-def">A unique product variant (size + flavour + pack).</span></div>
+    <div class="g-item"><span class="g-term"><abbr>SO</abbr>Sales Officer</span><span class="g-def">Manages 6-8 distributors at town/district level.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>TOT</abbr>Terms of Trade</span><span class="g-def">Annual commercial terms agreement with a distributor.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>YoY</abbr>Year over Year</span><span class="g-def">vs same period in previous year.</span></div>
+    <div class="g-item"><span class="g-term"><abbr>QoQ</abbr>Quarter over Quarter</span><span class="g-def">vs immediately preceding quarter.</span></div>
+  </div>
+</div>
+</section>
+
+<footer>
+<div class="wrap">
+  <div class="footer-grid">
+    <div>
+      <h5>The Analyst Desk</h5>
+      <p>A case-study and industry-primer series designed to prepare students for real analyst
+      roles at consulting firms, FMCG companies, consumer-tech firms, and subscription businesses.
+      Every case mirrors the structure used by real companies for first-round interviews and
+      onboarding.</p>
+    </div>
+    <div>
+      <h5>Series 03</h5>
+      <p>FMCG Sales &amp; Distribution Analytics  ·  Bhārat Foods Q2 FY26 Review</p>
+      <p>Previous: Customer Support + CRM (SoundWave Audio)  ·  Up next: Quick Commerce SQL · Fintech SQL · Banking Power BI</p>
+    </div>
+    <div>
+      <h5>For Educators</h5>
+      <p>Designed to be read <em>before</em> the Bhārat Foods case instructions PDF. Reading time:
+      ~22 minutes. Use as pre-reading in classroom / bootcamp settings.</p>
+    </div>
+  </div>
+  <div class="stamp">
+    Data and scenarios are synthetic but structurally modelled on real Indian mid-cap FMCG operations.
+    Prepared as an educational resource — not affiliated with any real brand mentioned.
+    © 2025 Analyst Desk  ·  For classroom and self-study use.
+  </div>
+</div>
+</footer>
+
+</body>
+</html>
